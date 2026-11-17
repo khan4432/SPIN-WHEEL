@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luxury 3D Spin Wheel - Huzaifa vs Ali</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent-1: #ffd700;
+      --accent-2: #ff8c00;
+      --glow-color: rgba(255, 215, 0, 0.75);
+      --wheel-half-1: #1a1a2e;
+      --wheel-half-2: #b8860b;
+      --text-3d-main: #ffffff;
+      --text-3d-shadow: #b8860b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      /* Live Animated Rainbow Wallpaper */
+      background: linear-gradient(
+        -45deg,
+        #ff0055,
+        #ff7b00,
+        #ffd500,
+        #00e676,
+        #00b0ff,
+        #651fff,
+        #d500f9
+      );
+      background-size: 400% 400%;
+      animation: liveRainbow 12s ease infinite;
+      position: relative;
+    }
+
+    /* Luxury dark glass vignette overlay over rainbow so lights pop */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(10, 10, 18, 0.35) 0%, rgba(5, 5, 12, 0.78) 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes liveRainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Top 10 Luxury Light Options Bar */
+    .top-bar {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      padding: 16px 20px;
+      background: rgba(15, 15, 25, 0.65);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .top-bar-title {
+      font-size: 12px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 600;
+    }
+
+    .theme-options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .theme-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      position: relative;
+    }
+
+    .theme-btn:hover {
+      transform: scale(1.18);
+    }
+
+    .theme-btn.active {
+      transform: scale(1.22);
+      border-color: #ffffff;
+      box-shadow: 0 0 18px #ffffff, 0 0 30px var(--glow-color);
+    }
+
+    /* Main Arena: Spin Wheel + 3D Text Side by Side */
+    .main-stage {
+      position: relative;
+      z-index: 5;
+      flex: 1;
+      width: 100%;
+      max-width: 1250px;
+      padding: 30px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 65px;
+      flex-wrap: wrap;
+    }
+
+    /* Wheel Container with Luxury Ambient Light */
+    .wheel-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .wheel-outer-ring {
+      position: relative;
+      width: 380px;
+      height: 380px;
+      border-radius: 50%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--accent-1), #ffffff, var(--accent-2));
+      box-shadow:
+        0 0 35px var(--glow-color),
+        0 0 75px var(--glow-color),
+        inset 0 0 20px rgba(0, 0, 0, 0.6);
+      transition: box-shadow 0.4s ease, background 0.4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Top Pointer Needle */
+    .pointer {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-top: 38px solid #ffffff;
+      filter: drop-shadow(0 4px 12px var(--glow-color));
+      z-index: 20;
+    }
+
+    canvas#wheelCanvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: block;
+      box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.65);
+    }
+
+    /* Center Luxury Cap */
+    .center-cap {
+      position: absolute;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent-1), #111);
+      border: 3px solid #fff;
+      box-shadow: 0 0 20px var(--glow-color);
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 11px;
+      color: #111;
+      letter-spacing: 1px;
+    }
+
+    /* Spin Button */
+    .spin-btn {
+      padding: 15px 52px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #111;
+      background: linear-gradient(135deg, #ffffff 0%, var(--accent-1) 50%, var(--accent-2) 100%);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px var(--glow-color);
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    .spin-btn:hover:not(:disabled) {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6), 0 0 40px var(--glow-color);
+    }
+
+    .spin-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* 3D Text Next to Spin Wheel */
+    .side-3d-panel {
+      perspective: 900px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      max-width: 480px;
+    }
+
+    .title-3d {
+      font-family: 'Cinzel', serif;
+      font-size: 56px;
+      font-weight: 900;
+      line-height: 1.12;
+      letter-spacing: 2px;
+      color: var(--text-3d-main);
+      text-transform: uppercase;
+      transform: rotateY(-14deg) rotateX(6deg);
+      transform-style: preserve-3d;
+      transition: text-shadow 0.4s ease, transform 0.4s ease;
+      text-shadow:
+        0 1px 0 #dcdcdc,
+        0 2px 0 #c8c8c8,
+        0 3px 0 #b4b4b4,
+        0 4px 0 #a0a0a0,
+        0 5px 0 #8c8c8c,
+        0 6px 0 var(--text-3d-shadow),
+        0 7px 0 var(--text-3d-shadow),
+        0 8px 0 var(--text-3d-shadow),
+        0 14px 25px rgba(0, 0, 0, 0.75),
+        0 0 35px var(--glow-color);
+      animation: float3D 4s ease-in-out infinite;
+    }
+
+    @keyframes float3D {
+      0%, 100% {
+        transform: rotateY(-14deg) rotateX(6deg) translateY(0px);
+      }
+      50% {
+        transform: rotateY(-8deg) rotateX(3deg) translateY(-8px);
+      }
+    }
+
+    /* Winner Banner */
+    .winner-display {
+      margin-top: 24px;
+      padding: 14px 26px;
+      border-radius: 14px;
+      background: rgba(15, 15, 25, 0.65);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--accent-1);
+      box-shadow: 0 0 25px var(--glow-color);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    @media (max-width: 900px) {
+      .main-stage {
+        flex-direction: column;
+        gap: 35px;
+      }
+      .side-3d-panel {
+        align-items: center;
+        text-align: center;
+      }
+      .title-3d {
+        font-size: 40px;
+        transform: none;
+      }
+      .wheel-outer-ring {
+        width: 320px;
+        height: 320px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top 10 Luxury Light Color Options -->
+  <div class="top-bar">
+    <div class="top-bar-title">Select Luxury Light Theme (10 Premium Lights)</div>
+    <div class="theme-options" id="themeOptions"></div>
+  </div>
+
+  <!-- Main Stage -->
+  <div class="main-stage">
+    <!-- Left: Spin Wheel -->
+    <div class="wheel-wrapper">
+      <div class="wheel-outer-ring">
+        <div class="pointer"></div>
+        <canvas id="wheelCanvas" width="400" height="400"></canvas>
+        <div class="center-cap">VS</div>
+      </div>
+      <button class="spin-btn" id="spinBtn">SPIN NOW</button>
+    </div>
+
+    <!-- Right: 3D Welcome Text & Result -->
+    <div class="side-3d-panel">
+      <h1 class="title-3d">WELCOME TO<br>SPIN WHEEL</h1>
+      <div class="winner-display" id="winnerDisplay">Ready to Spin: HUZAIFA vs ALI</div>
+    </div>
+  </div>
+
+  <script>
+    // 10 Luxury Light Themes
+    const luxuryThemes = [
+      { name: "Royal Gold",      a1: "#ffd700", a2: "#ff9900", glow: "rgba(255, 215, 0, 0.85)",   h1: "#14141f", h2: "#b8860b", shadow: "#996515" },
+      { name: "Platinum Ice",    a1: "#e0f7fa", a2: "#80deea", glow: "rgba(128, 222, 234, 0.85)", h1: "#102027", h2: "#37474f", shadow: "#4dd0e1" },
+      { name: "Emerald Luxury",  a1: "#00e676", a2: "#00bfa5", glow: "rgba(0, 230, 118, 0.85)",   h1: "#0b2218", h2: "#00695c", shadow: "#00897b" },
+      { name: "Rose Gold",       a1: "#ffb6c1", a2: "#e5989b", glow: "rgba(255, 182, 193, 0.85)", h1: "#2b1920", h2: "#b56576", shadow: "#a45061" },
+      { name: "Sapphire Neon",   a1: "#2979ff", a2: "#00b0ff", glow: "rgba(41, 121, 255, 0.85)",  h1: "#0a1128", h2: "#1565c0", shadow: "#0d47a1" },
+      { name: "Amethyst Glow",   a1: "#d500f9", a2: "#aa00ff", glow: "rgba(213, 0, 249, 0.85)",   h1: "#1d0b2b", h2: "#6a1b9a", shadow: "#4a148c" },
+      { name: "Crimson Velvet",  a1: "#ff1744", a2: "#d50000", glow: "rgba(255, 23, 68, 0.85)",    h1: "#24090e", h2: "#9b0000", shadow: "#7f0000" },
+      { name: "Champagne Pearl", a1: "#fff8e1", a2: "#ffe082", glow: "rgba(255, 224, 130, 0.85)", h1: "#26221b", h2: "#a88f4c", shadow: "#8c7335" },
+      { name: "Cyber Turquoise", a1: "#1de9b6", a2: "#00e5ff", glow: "rgba(0, 229, 255, 0.85)",   h1: "#082026", h2: "#00838f", shadow: "#006064" },
+      { name: "Sunset Copper",   a1: "#ff6e40", a2: "#ff3d00", glow: "rgba(255, 110, 64, 0.85)",  h1: "#26120b", h2: "#bf360c", shadow: "#870000" }
+    ];
+
+    let currentTheme = luxuryThemes[0];
+    const themeContainer = document.getElementById("themeOptions");
+
+    // Render 10 Theme Buttons
+    luxuryThemes.forEach((theme, index) => {
+      const btn = document.createElement("button");
+      btn.className = "theme-btn" + (index === 0 ? " active" : "");
+      btn.title = theme.name;
+      btn.style.background = `linear-gradient(135deg, ${theme.a1}, ${theme.a2})`;
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".theme-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        applyTheme(theme);
+      });
+      themeContainer.appendChild(btn);
+    });
+
+    function applyTheme(theme) {
+      currentTheme = theme;
+      const root = document.documentElement;
+      root.style.setProperty("--accent-1", theme.a1);
+      root.style.setProperty("--accent-2", theme.a2);
+      root.style.setProperty("--glow-color", theme.glow);
+      root.style.setProperty("--wheel-half-1", theme.h1);
+      root.style.setProperty("--wheel-half-2", theme.h2);
+      root.style.setProperty("--text-3d-shadow", theme.shadow);
+      drawWheel();
+    }
+
+    // Canvas Wheel Setup (50% HUZAIFA, 50% ALI)
+    const canvas = document.getElementById("wheelCanvas");
+    const ctx = canvas.getContext("2d");
+    const segments = ["HUZAIFA", "ALI"];
+    let currentAngle = 0;
+    let isSpinning = false;
+
+    function drawWheel() {
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = canvas.width / 2;
+      const sliceAngle = Math.PI; // Half circle (180 degrees each)
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < 2; i++) {
+        const startAngle = currentAngle + i * sliceAngle;
+        const endAngle = startAngle + sliceAngle;
+
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.closePath();
+
+        ctx.fillStyle = i === 0 ? currentTheme.h1 : currentTheme.h2;
+        ctx.fill();
+
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = currentTheme.a1;
+        ctx.stroke();
+
+        // Draw Text inside each half
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(startAngle + sliceAngle / 2);
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 30px 'Poppins', sans-serif";
+        ctx.shadowColor = "rgba(0,0,0,0.8)";
+        ctx.shadowBlur = 8;
+        ctx.fillText(segments[i], radius * 0.52, 0);
+        ctx.restore();
+      }
+    }
+
+    // Voice Announcement Function
+    function speakMessage(text) {
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "hi-IN";
+        utterance.rate = 0.95;
+        utterance.pitch = 1.05;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    // Spin Logic
+    const spinBtn = document.getElementById("spinBtn");
+    const winnerDisplay = document.getElementById("winnerDisplay");
+
+    spinBtn.addEventListener("click", () => {
+      if (isSpinning) return;
+      isSpinning = true;
+      spinBtn.disabled = true;
+      winnerDisplay.textContent = "Spinning...";
+
+      // Required Voice Line
+      speakMessage("DEKHTE HAI KON JITE GA AUR KAUN HAARE GA");
+
+      const spinDuration = 4500; // 4.5 seconds
+      const extraSpins = (Math.floor(Math.random() * 5) + 6) * 2 * Math.PI;
+      const randomStop = Math.random() * 2 * Math.PI;
+      const targetAngle = currentAngle + extraSpins + randomStop;
+      const startAngle = currentAngle;
+      const startTime = performance.now();
+
+      function animateSpin(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / spinDuration, 1);
+        // Smooth ease-out cubic
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        currentAngle = startAngle + (targetAngle - startAngle) * easeOut;
+
+        drawWheel();
+
+        if (progress < 1) {
+          requestAnimationFrame(animateSpin);
+        } else {
+          currentAngle = currentAngle % (2 * Math.PI);
+          isSpinning = false;
+          spinBtn.disabled = false;
+
+          // Pointer is at Top (-PI / 2 or 3*PI / 2)
+          const pointerAngle = (1.5 * Math.PI - currentAngle + 2 * Math.PI) % (2 * Math.PI);
+          const winnerIndex = pointerAngle < Math.PI ? 0 : 1;
+          const winnerName = segments[winnerIndex];
+          const loserName = segments[1 - winnerIndex];
+
+          winnerDisplay.innerHTML = `WINNER: <span style="color:${currentTheme.a1}; margin: 0 8px;">${winnerName}</span> | LOSER: ${loserName}`;
+        }
+      }
+
+      requestAnimationFrame(animateSpin);
+    });
+
+    // Initial render
+    applyTheme(luxuryThemes[0]);
+  </script>
+</body>
+</html>
