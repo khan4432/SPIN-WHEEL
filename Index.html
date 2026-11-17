@@ -4,16 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Luxury 3D Spin Wheel - Huzaifa vs Ali</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --accent-1: #ffd700;
       --accent-2: #ff8c00;
-      --glow-color: rgba(255, 215, 0, 0.75);
-      --wheel-half-1: #1a1a2e;
+      --glow-color: rgba(255, 215, 0, 0.8);
+      --wheel-half-1: #141424;
       --wheel-half-2: #b8860b;
       --text-3d-main: #ffffff;
-      --text-3d-shadow: #b8860b;
+      --text-3d-shadow: #996515;
     }
 
     * {
@@ -24,7 +23,7 @@
 
     body {
       min-height: 100vh;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       color: #fff;
       overflow-x: hidden;
       display: flex;
@@ -43,16 +42,15 @@
         #d500f9
       );
       background-size: 400% 400%;
-      animation: liveRainbow 12s ease infinite;
+      animation: liveRainbow 10s ease infinite;
       position: relative;
     }
 
-    /* Luxury dark glass vignette overlay over rainbow so lights pop */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at center, rgba(10, 10, 18, 0.35) 0%, rgba(5, 5, 12, 0.78) 100%);
+      background: radial-gradient(circle at center, rgba(10, 10, 18, 0.3) 0%, rgba(5, 5, 12, 0.78) 100%);
       pointer-events: none;
       z-index: 0;
     }
@@ -69,22 +67,23 @@
       z-index: 10;
       width: 100%;
       padding: 16px 20px;
-      background: rgba(15, 15, 25, 0.65);
+      background: rgba(12, 12, 22, 0.7);
       backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 10px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
     }
 
     .top-bar-title {
       font-size: 12px;
       letter-spacing: 2.5px;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.85);
-      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 700;
     }
 
     .theme-options {
@@ -98,10 +97,9 @@
       width: 34px;
       height: 34px;
       border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.45);
       cursor: pointer;
       transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-      position: relative;
     }
 
     .theme-btn:hover {
@@ -109,12 +107,12 @@
     }
 
     .theme-btn.active {
-      transform: scale(1.22);
+      transform: scale(1.24);
       border-color: #ffffff;
-      box-shadow: 0 0 18px #ffffff, 0 0 30px var(--glow-color);
+      box-shadow: 0 0 18px #ffffff, 0 0 32px var(--glow-color);
     }
 
-    /* Main Arena: Spin Wheel + 3D Text Side by Side */
+    /* Main Arena */
     .main-stage {
       position: relative;
       z-index: 5;
@@ -125,17 +123,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 65px;
+      gap: 70px;
       flex-wrap: wrap;
     }
 
-    /* Wheel Container with Luxury Ambient Light */
     .wheel-wrapper {
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 24px;
+      gap: 26px;
     }
 
     .wheel-outer-ring {
@@ -147,15 +144,14 @@
       background: linear-gradient(135deg, var(--accent-1), #ffffff, var(--accent-2));
       box-shadow:
         0 0 35px var(--glow-color),
-        0 0 75px var(--glow-color),
-        inset 0 0 20px rgba(0, 0, 0, 0.6);
+        0 0 80px var(--glow-color),
+        inset 0 0 20px rgba(0, 0, 0, 0.65);
       transition: box-shadow 0.4s ease, background 0.4s ease;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    /* Top Pointer Needle */
     .pointer {
       position: absolute;
       top: -22px;
@@ -175,33 +171,31 @@
       height: 100%;
       border-radius: 50%;
       display: block;
-      box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.65);
+      box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.7);
     }
 
-    /* Center Luxury Cap */
     .center-cap {
       position: absolute;
-      width: 64px;
-      height: 64px;
+      width: 66px;
+      height: 66px;
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent-1), #111);
       border: 3px solid #fff;
-      box-shadow: 0 0 20px var(--glow-color);
+      box-shadow: 0 0 22px var(--glow-color);
       z-index: 15;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 800;
-      font-size: 11px;
+      font-weight: 900;
+      font-size: 13px;
       color: #111;
       letter-spacing: 1px;
     }
 
-    /* Spin Button */
     .spin-btn {
-      padding: 15px 52px;
+      padding: 16px 54px;
       font-size: 20px;
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing: 3px;
       text-transform: uppercase;
       color: #111;
@@ -209,31 +203,31 @@
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px var(--glow-color);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55), 0 0 28px var(--glow-color);
       transition: transform 0.2s ease, box-shadow 0.3s ease;
     }
 
     .spin-btn:hover:not(:disabled) {
       transform: translateY(-3px) scale(1.04);
-      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6), 0 0 40px var(--glow-color);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.65), 0 0 42px var(--glow-color);
     }
 
     .spin-btn:disabled {
-      opacity: 0.6;
+      opacity: 0.65;
       cursor: not-allowed;
     }
 
-    /* 3D Text Next to Spin Wheel */
+    /* 3D Welcome Text Next to Spin Wheel */
     .side-3d-panel {
       perspective: 900px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      max-width: 480px;
+      max-width: 500px;
     }
 
     .title-3d {
-      font-family: 'Cinzel', serif;
+      font-family: Georgia, 'Times New Roman', serif;
       font-size: 56px;
       font-weight: 900;
       line-height: 1.12;
@@ -252,8 +246,8 @@
         0 6px 0 var(--text-3d-shadow),
         0 7px 0 var(--text-3d-shadow),
         0 8px 0 var(--text-3d-shadow),
-        0 14px 25px rgba(0, 0, 0, 0.75),
-        0 0 35px var(--glow-color);
+        0 14px 25px rgba(0, 0, 0, 0.8),
+        0 0 38px var(--glow-color);
       animation: float3D 4s ease-in-out infinite;
     }
 
@@ -266,19 +260,18 @@
       }
     }
 
-    /* Winner Banner */
     .winner-display {
-      margin-top: 24px;
-      padding: 14px 26px;
+      margin-top: 26px;
+      padding: 15px 28px;
       border-radius: 14px;
-      background: rgba(15, 15, 25, 0.65);
+      background: rgba(15, 15, 25, 0.72);
       backdrop-filter: blur(10px);
-      border: 1px solid var(--accent-1);
-      box-shadow: 0 0 25px var(--glow-color);
+      border: 1.5px solid var(--accent-1);
+      box-shadow: 0 0 28px var(--glow-color);
       font-size: 20px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 1px;
-      min-height: 58px;
+      min-height: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -333,7 +326,6 @@
   </div>
 
   <script>
-    // 10 Luxury Light Themes
     const luxuryThemes = [
       { name: "Royal Gold",      a1: "#ffd700", a2: "#ff9900", glow: "rgba(255, 215, 0, 0.85)",   h1: "#14141f", h2: "#b8860b", shadow: "#996515" },
       { name: "Platinum Ice",    a1: "#e0f7fa", a2: "#80deea", glow: "rgba(128, 222, 234, 0.85)", h1: "#102027", h2: "#37474f", shadow: "#4dd0e1" },
@@ -350,7 +342,6 @@
     let currentTheme = luxuryThemes[0];
     const themeContainer = document.getElementById("themeOptions");
 
-    // Render 10 Theme Buttons
     luxuryThemes.forEach((theme, index) => {
       const btn = document.createElement("button");
       btn.className = "theme-btn" + (index === 0 ? " active" : "");
@@ -376,7 +367,6 @@
       drawWheel();
     }
 
-    // Canvas Wheel Setup (50% HUZAIFA, 50% ALI)
     const canvas = document.getElementById("wheelCanvas");
     const ctx = canvas.getContext("2d");
     const segments = ["HUZAIFA", "ALI"];
@@ -387,7 +377,7 @@
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
       const radius = canvas.width / 2;
-      const sliceAngle = Math.PI; // Half circle (180 degrees each)
+      const sliceAngle = Math.PI;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -407,22 +397,20 @@
         ctx.strokeStyle = currentTheme.a1;
         ctx.stroke();
 
-        // Draw Text inside each half
         ctx.save();
         ctx.translate(centerX, centerY);
         ctx.rotate(startAngle + sliceAngle / 2);
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillStyle = "#ffffff";
-        ctx.font = "900 30px 'Poppins', sans-serif";
-        ctx.shadowColor = "rgba(0,0,0,0.8)";
+        ctx.font = "900 30px 'Segoe UI', Arial, sans-serif";
+        ctx.shadowColor = "rgba(0,0,0,0.85)";
         ctx.shadowBlur = 8;
         ctx.fillText(segments[i], radius * 0.52, 0);
         ctx.restore();
       }
     }
 
-    // Voice Announcement Function
     function speakMessage(text) {
       if ("speechSynthesis" in window) {
         window.speechSynthesis.cancel();
@@ -434,7 +422,6 @@
       }
     }
 
-    // Spin Logic
     const spinBtn = document.getElementById("spinBtn");
     const winnerDisplay = document.getElementById("winnerDisplay");
 
@@ -444,10 +431,9 @@
       spinBtn.disabled = true;
       winnerDisplay.textContent = "Spinning...";
 
-      // Required Voice Line
       speakMessage("DEKHTE HAI KON JITE GA AUR KAUN HAARE GA");
 
-      const spinDuration = 4500; // 4.5 seconds
+      const spinDuration = 4500;
       const extraSpins = (Math.floor(Math.random() * 5) + 6) * 2 * Math.PI;
       const randomStop = Math.random() * 2 * Math.PI;
       const targetAngle = currentAngle + extraSpins + randomStop;
@@ -457,7 +443,6 @@
       function animateSpin(now) {
         const elapsed = now - startTime;
         const progress = Math.min(elapsed / spinDuration, 1);
-        // Smooth ease-out cubic
         const easeOut = 1 - Math.pow(1 - progress, 3);
         currentAngle = startAngle + (targetAngle - startAngle) * easeOut;
 
@@ -470,7 +455,6 @@
           isSpinning = false;
           spinBtn.disabled = false;
 
-          // Pointer is at Top (-PI / 2 or 3*PI / 2)
           const pointerAngle = (1.5 * Math.PI - currentAngle + 2 * Math.PI) % (2 * Math.PI);
           const winnerIndex = pointerAngle < Math.PI ? 0 : 1;
           const winnerName = segments[winnerIndex];
@@ -483,7 +467,6 @@
       requestAnimationFrame(animateSpin);
     });
 
-    // Initial render
     applyTheme(luxuryThemes[0]);
   </script>
 </body>
