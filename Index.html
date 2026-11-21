@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Luxury 3D Spin Wheel - Huzaifa vs Ali</title>
+  <title>Luxury 3D Spin Wheel - Huzaifa vs Ali (12 Slices)</title>
   <style>
     :root {
       --accent-1: #ffd700;
@@ -137,8 +137,8 @@
 
     .wheel-outer-ring {
       position: relative;
-      width: 380px;
-      height: 380px;
+      width: 400px;
+      height: 400px;
       border-radius: 50%;
       padding: 14px;
       background: linear-gradient(135deg, var(--accent-1), #ffffff, var(--accent-2));
@@ -292,8 +292,8 @@
         transform: none;
       }
       .wheel-outer-ring {
-        width: 320px;
-        height: 320px;
+        width: 330px;
+        height: 330px;
       }
     }
   </style>
@@ -308,11 +308,11 @@
 
   <!-- Main Stage -->
   <div class="main-stage">
-    <!-- Left: Spin Wheel -->
+    <!-- Left: Spin Wheel (12 Slices) -->
     <div class="wheel-wrapper">
       <div class="wheel-outer-ring">
         <div class="pointer"></div>
-        <canvas id="wheelCanvas" width="400" height="400"></canvas>
+        <canvas id="wheelCanvas" width="440" height="440"></canvas>
         <div class="center-cap">VS</div>
       </div>
       <button class="spin-btn" id="spinBtn">SPIN NOW</button>
@@ -367,9 +367,11 @@
       drawWheel();
     }
 
+    // 12 Equal Slices (6 HUZAIFA, 6 ALI)
     const canvas = document.getElementById("wheelCanvas");
     const ctx = canvas.getContext("2d");
-    const segments = ["HUZAIFA", "ALI"];
+    const totalSlices = 12;
+    const segments = Array.from({ length: totalSlices }, (_, i) => (i % 2 === 0 ? "HUZAIFA" : "ALI"));
     let currentAngle = 0;
     let isSpinning = false;
 
@@ -377,11 +379,11 @@
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
       const radius = canvas.width / 2;
-      const sliceAngle = Math.PI;
+      const sliceAngle = (2 * Math.PI) / totalSlices; // 30 degrees per slice
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < totalSlices; i++) {
         const startAngle = currentAngle + i * sliceAngle;
         const endAngle = startAngle + sliceAngle;
 
@@ -390,23 +392,24 @@
         ctx.arc(centerX, centerY, radius, startAngle, endAngle);
         ctx.closePath();
 
-        ctx.fillStyle = i === 0 ? currentTheme.h1 : currentTheme.h2;
+        ctx.fillStyle = i % 2 === 0 ? currentTheme.h1 : currentTheme.h2;
         ctx.fill();
 
-        ctx.lineWidth = 4;
+        ctx.lineWidth = 2.5;
         ctx.strokeStyle = currentTheme.a1;
         ctx.stroke();
 
+        // Draw Name radially inside each of the 12 slices
         ctx.save();
         ctx.translate(centerX, centerY);
         ctx.rotate(startAngle + sliceAngle / 2);
-        ctx.textAlign = "center";
+        ctx.textAlign = "right";
         ctx.textBaseline = "middle";
         ctx.fillStyle = "#ffffff";
-        ctx.font = "900 30px 'Segoe UI', Arial, sans-serif";
-        ctx.shadowColor = "rgba(0,0,0,0.85)";
-        ctx.shadowBlur = 8;
-        ctx.fillText(segments[i], radius * 0.52, 0);
+        ctx.font = "900 18px 'Segoe UI', Arial, sans-serif";
+        ctx.shadowColor = "rgba(0,0,0,0.9)";
+        ctx.shadowBlur = 6;
+        ctx.fillText(segments[i], radius - 22, 0);
         ctx.restore();
       }
     }
@@ -455,10 +458,11 @@
           isSpinning = false;
           spinBtn.disabled = false;
 
+          const sliceAngle = (2 * Math.PI) / totalSlices;
           const pointerAngle = (1.5 * Math.PI - currentAngle + 2 * Math.PI) % (2 * Math.PI);
-          const winnerIndex = pointerAngle < Math.PI ? 0 : 1;
+          const winnerIndex = Math.floor(pointerAngle / sliceAngle) % totalSlices;
           const winnerName = segments[winnerIndex];
-          const loserName = segments[1 - winnerIndex];
+          const loserName = winnerName === "HUZAIFA" ? "ALI" : "HUZAIFA";
 
           winnerDisplay.innerHTML = `WINNER: <span style="color:${currentTheme.a1}; margin: 0 8px;">${winnerName}</span> | LOSER: ${loserName}`;
         }
